@@ -18,7 +18,8 @@ public class CryptoController {
     }
 
     // Přidání nové kryptoměny
-    @PostMapping("/cryptos")
+//    @PostMapping("/cryptos")
+    @PostMapping
     public ResponseEntity<String> addCrypto(@RequestBody Crypto crypto) {
         cryptoService.addCrypto(crypto);
         return ResponseEntity.ok("Crypto added successfully");
@@ -31,7 +32,8 @@ public class CryptoController {
     }
 
     // Detail kryptoměny podle ID
-    @GetMapping("/cryptos/{id}")
+//    @GetMapping("/cryptos/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Crypto> getCryptoById(@PathVariable Integer id) {
         Crypto crypto = cryptoService.getCryptoById(id);
         if (crypto != null) {
