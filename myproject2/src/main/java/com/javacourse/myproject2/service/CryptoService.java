@@ -35,12 +35,6 @@ public class CryptoService {
                 .orElse(null);
     }
 
-//    public Optional<Crypto> getCryptoById(Integer id) {
-//        return portfolio.stream()
-//                .filter(c -> c.getId().equals(id))
-//                .findFirst();
-//    }
-
     public Crypto updateCrypto(Integer id, Crypto updatedCrypto) {
         for (int i = 0; i < portfolio.size(); i++) {
             Crypto existing = portfolio.get(i);

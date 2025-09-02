@@ -42,9 +42,7 @@ public class CryptoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Crypto> updateCrypto(
-            @PathVariable Integer id,
-            @RequestBody Crypto updatedCrypto) {
+    public ResponseEntity<Crypto> updateCrypto(@PathVariable Integer id, @RequestBody Crypto updatedCrypto) {
         Crypto crypto = cryptoService.updateCrypto(id, updatedCrypto);
         if (crypto != null) {
             return ResponseEntity.ok(crypto);
