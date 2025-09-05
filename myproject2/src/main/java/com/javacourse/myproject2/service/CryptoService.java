@@ -1,8 +1,10 @@
 package com.javacourse.myproject2.service;
 
+import com.javacourse.myproject2.exception.CryptoNotFoundException;
 import com.javacourse.myproject2.model.Crypto;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -28,28 +30,28 @@ public class CryptoService {
         return sortedList;
     }
 
-    public Crypto getCryptoById(Integer id) {
+    public Crypto getCryptoById(Integer id) throws CryptoNotFoundException {
         return portfolio.stream()
                 .filter(c -> c.getId().equals(id))
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(() -> new CryptoNotFoundException(id));
     }
 
-    public Crypto updateCrypto(Integer id, Crypto updatedCrypto) {
-        for (int i = 0; i < portfolio.size(); i++) {
-            Crypto existing = portfolio.get(i);
+    public Crypto updateCrypto(Integer id, Crypto updatedCrypto) throws CryptoNotFoundException {
+        portfolio.forEach(existing -> {
             if (existing.getId().equals(id)) {
-                updatedCrypto.setId(id);          // stejne Id
-                portfolio.set(i, updatedCrypto);
-                return updatedCrypto;
+                existing.setName(updatedCrypto.getName());
+                existing.setSymbol(updatedCrypto.getSymbol());
+                existing.setPrice(updatedCrypto.getPrice());
+                existing.setQuantity(updatedCrypto.getQuantity());
             }
-        }
-        return null;
+        } );
+        return getCryptoById(id);
     }
 
-    public double getPortfolioValue() {
+    public BigDecimal getPortfolioValue() {
         return portfolio.stream()
-                .mapToDouble(c -> c.getPrice() * c.getQuantity())
-                .sum();
+                .map(c -> c.getPrice().multiply(c.getQuantity()))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }
